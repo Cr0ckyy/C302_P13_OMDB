@@ -63,8 +63,10 @@ public class LoginActivity extends AppCompatActivity {
                     RequestParams params = new RequestParams();
                     params.add("username", username);
                     params.add("password", password);
-                    // http://localhost/C302_P13/doLogin.php
+
                     // http://10.0.2.2/C302_P13/dbFunctions.php
+                    // http://10.0.2.2/C302_P13/doLogin.php
+                    //   client.get("http://10.0.2.2/C302_sakila/getRentalLocationsByFilmId.php", params, new JsonHttpResponseHandler() {
                     client.post("http://10.0.2.2/C302_P13/doLogin.php", params, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -79,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 } else
-                                    Toast.makeText(LoginActivity.this, "username or password wrong", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Incorrect username or password.", Toast.LENGTH_SHORT).show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -95,9 +97,9 @@ public class LoginActivity extends AppCompatActivity {
     public void getLocalIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
+                NetworkInterface networkInterface = en.nextElement();
+                for (Enumeration<InetAddress> addressEnumeration = networkInterface.getInetAddresses(); addressEnumeration.hasMoreElements(); ) {
+                    InetAddress inetAddress = addressEnumeration.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
                         String localIpAddressMsg = String.format("%s: Android Emulator's IP address: %s", TAG, inetAddress.getHostAddress());
                         System.out.println(localIpAddressMsg);
