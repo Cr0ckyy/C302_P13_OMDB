@@ -63,11 +63,12 @@ public class LoginActivity extends AppCompatActivity {
                     RequestParams params = new RequestParams();
                     params.add("username", username);
                     params.add("password", password);
+                    String url = "http://10.0.2.2/C302_P13/doLogin.php";
 
                     // http://10.0.2.2/C302_P13/dbFunctions.php
                     // http://10.0.2.2/C302_P13/doLogin.php
                     //   client.get("http://10.0.2.2/C302_sakila/getRentalLocationsByFilmId.php", params, new JsonHttpResponseHandler() {
-                    client.post("http://10.0.2.2/C302_P13/doLogin.php", params, new JsonHttpResponseHandler() {
+                    client.post(url, params, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
