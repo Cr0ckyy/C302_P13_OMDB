@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.putString("apikey", response.getString("apikey"));
                                     editor.apply();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    Toast.makeText(LoginActivity.this, "Successful login.", Toast.LENGTH_SHORT).show();
                                     startActivity(intent);
                                 } else
                                     Toast.makeText(LoginActivity.this, "Incorrect username or password.", Toast.LENGTH_SHORT).show();

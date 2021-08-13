@@ -41,7 +41,7 @@ public class CreateMovieActivity extends AppCompatActivity {
     final String TAG = "CreateMovieActivity";
     SharedPreferences sharedPreferences;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    static Task<FirebaseVisionText> result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,10 +110,14 @@ public class CreateMovieActivity extends AppCompatActivity {
                 .addOnFailureListener((Exception e)
                         -> Log.w(TAG, "Error adding document", e)
                 );
+
+        Toast.makeText(CreateMovieActivity.this, "This movie has been added to the database by you.", Toast.LENGTH_SHORT).show();
+
         finish();
     }
 
     public void btnSearchOnClick(View v) {
+
         if (etTitle.getText().toString().trim().isEmpty()) {
             Toast.makeText(CreateMovieActivity.this, "The title remains empty.",
                     Toast.LENGTH_SHORT).show();
@@ -139,6 +143,10 @@ public class CreateMovieActivity extends AppCompatActivity {
                     etPlot.setText(response.getString("Plot"));
                     etLanguage.setText(response.getString("Language"));
                     etPoster.setText(response.getString("Poster"));
+
+
+                    Toast.makeText(CreateMovieActivity.this, "Here's the movie you've been looking for.",
+                            Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -161,21 +169,23 @@ public class CreateMovieActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
             //TODO: feed imageBitmap into FirebaseVisionImage for text recognizing
-            FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(imageBitmap);
-            FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance()
-                    .getCloudTextRecognizer();
+            FirebaseVisionImage visionImage = FirebaseVisionImage.fromBitmap(imageBitmap);
+            FirebaseVisionTextRecognizer cloudTextRecognizer = FirebaseVision.getInstance().getCloudTextRecognizer();
 
-            Task<FirebaseVisionText> result = detector.processImage(image)
+            result = cloudTextRecognizer.processImage(visionImage)
                     .addOnSuccessListener((FirebaseVisionText firebaseVisionText)
                             -> etTitle.setText(firebaseVisionText.getText()))
                     .addOnFailureListener((Exception e) ->
                             Toast.makeText(CreateMovieActivity.this,
-                                    "Cannot find text", Toast.LENGTH_SHORT).show()
+                                    "Text can't be found.", Toast.LENGTH_SHORT).show()
                     );
+
         }
     }
 }

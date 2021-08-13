@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.33697916666666666" />
         <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/activity_create_movie.xml" value="0.25" />
         <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/activity_login.xml" value="0.2246376811594203" />
         <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/activity_main.xml" value="0.2246376811594203" />
         <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/activity_view_movie_details.xml" value="0.25" />
-        <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/movie_row.xml" value="0.2246376811594203" />
+        <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/movie_row.xml" value="0.33" />
+        <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/layout/temp.xml" value="0.33" />
         <entry key="..\:/C346/Workspace/P01/C302_P13_OMDB/app/src/main/res/menu/main.xml" value="0.36666666666666664" />
       </map>
     </option>

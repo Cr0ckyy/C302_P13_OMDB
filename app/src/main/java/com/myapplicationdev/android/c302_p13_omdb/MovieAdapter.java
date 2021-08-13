@@ -13,12 +13,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.util.TextUtils;
+
 public class MovieAdapter extends ArrayAdapter<Movie> {
 
+    TextView tvTitle, tvReleased;
     ArrayList<Movie> list;
-     Context context;
+    Context context;
+    ImageView imageView;
+    Movie movie;
+    LayoutInflater inflater;
 
-    public MovieAdapter(Context context, int resource, ArrayList<Movie> objects){
+    public MovieAdapter(Context context, int resource, ArrayList<Movie> objects) {
         super(context, resource, objects);
         list = objects;
         this.context = context;
@@ -27,17 +33,24 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("ViewHolder") View rowView = inflater.inflate(R.layout.movie_row, parent, false);
 
-        TextView tvTitle = rowView.findViewById(R.id.tvTitle);
-        TextView tvReleased = rowView.findViewById(R.id.tvReleased);
-        ImageView img = rowView.findViewById(R.id.img);
+        tvTitle = rowView.findViewById(R.id.tvTitle);
+        tvReleased = rowView.findViewById(R.id.tvReleased);
+        imageView = rowView.findViewById(R.id.imageView);
 
-        Movie movie = list.get(position);
+        movie = list.get(position);
+
         tvTitle.setText(movie.getTitle());
         tvReleased.setText(movie.getReleased());
-        Picasso.get().load(movie.getPoster()).resize(50,50).into(img);
+
+        if (TextUtils.isEmpty(movie.getPoster())) {
+            // Load default image
+            imageView.setImageResource(R.drawable.click_poster);
+        } else {
+            Picasso.get().load(movie.getPoster()).resize(50, 50).into(imageView);
+        }
 
 
         return rowView;

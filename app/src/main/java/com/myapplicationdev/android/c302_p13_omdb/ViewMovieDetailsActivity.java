@@ -9,12 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,7 +22,7 @@ public class ViewMovieDetailsActivity extends AppCompatActivity {
     Button btnUpdate, btnDelete;
     String movieId;
     static final String TAG = "ViewMovieDetailsActivity";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
 
     @SuppressLint("LongLogTag")
     @Override
@@ -48,7 +44,7 @@ public class ViewMovieDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         movieId = intent.getStringExtra("movie_id");
-        DocumentReference documentReference = db.collection("movies").document(movieId);
+        DocumentReference documentReference = fireStore.collection("movies").document(movieId);
 
         documentReference.get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
             if (task.isSuccessful()) {
@@ -89,9 +85,10 @@ public class ViewMovieDetailsActivity extends AppCompatActivity {
                 etActors.getText().toString().trim(),
                 etPlot.getText().toString().trim(),
                 etLanguage.getText().toString().trim(),
-                etPoster.getText().toString().trim());
+                etPoster.getText().toString().trim()
+        );
 
-        db.collection("movies").document(movieId).set(movie)
+        fireStore.collection("movies").document(movieId).set(movie)
                 .addOnSuccessListener((Void unused) ->
                         Toast.makeText(ViewMovieDetailsActivity.this,
                                 "This movie has been updated.", Toast.LENGTH_SHORT).show())
@@ -99,17 +96,19 @@ public class ViewMovieDetailsActivity extends AppCompatActivity {
                         Toast.makeText(
                                 ViewMovieDetailsActivity.this,
                                 "Fail to update this movie.", Toast.LENGTH_SHORT).show());
+
         finish();
     }
 
     public void btnDeleteOnClick(View v) {
-        db.collection("movies").document(movieId).delete()
+        fireStore.collection("movies").document(movieId).delete()
                 .addOnSuccessListener((Void unused) ->
                         Toast.makeText(ViewMovieDetailsActivity.this,
                                 "This movie has been deleted.", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener((Exception e) ->
                         Toast.makeText(ViewMovieDetailsActivity.this,
                                 "Fail to delete this movie.", Toast.LENGTH_SHORT).show());
+
         finish();
     }
 

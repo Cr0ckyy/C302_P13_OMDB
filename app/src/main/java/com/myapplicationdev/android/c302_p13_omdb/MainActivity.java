@@ -19,51 +19,55 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-    ArrayList<Movie> list;
-    MovieAdapter adapter;
+    ListView movieListView;
+    ArrayList<Movie> movies;
+    MovieAdapter movieAdapter;
     final String TAG = "MainActivity";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore Firestore = FirebaseFirestore.getInstance();
     SharedPreferences sharedPreferences;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = findViewById(R.id.listViewMovies);
-        list = new ArrayList<>();
-        adapter = new MovieAdapter(this, R.layout.movie_row, list);
-        listView.setAdapter(adapter);
+        movieListView = findViewById(R.id.listViewMovies);
+
+        movies = new ArrayList<>();
+        movieAdapter = new MovieAdapter(this, R.layout.movie_row, movies);
+        movieListView.setAdapter(movieAdapter);
+
         sharedPreferences = getSharedPreferences("C302_P13", Context.MODE_PRIVATE);
 
-        db.collection("movies")
+        Firestore.collection("movies")
                 .addSnapshotListener((QuerySnapshot value, FirebaseFirestoreException e) -> {
 
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e);
                         return;
                     }
-                    list.clear();
+                    movies.clear();
 
-                    assert value != null;
-                    for (QueryDocumentSnapshot doc : value) {
+
+                    for (QueryDocumentSnapshot doc : Objects.requireNonNull(value)) {
                         Movie movie = doc.toObject(Movie.class);
                         movie.setMovieId(doc.getId());
-                        list.add(movie);
+                        movies.add(movie);
                     }
-                    adapter.notifyDataSetChanged();
+                    movieAdapter.notifyDataSetChanged();
                 });
 
-        listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+        movieListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
 
-            Movie selectedContact = list.get(position);
-            Intent i = new Intent(getBaseContext(), ViewMovieDetailsActivity.class);
-            i.putExtra("movie_id", selectedContact.getMovieId());
-            startActivity(i);
+            Movie selectedMovie = movies.get(position);
+            intent = new Intent(getBaseContext(), ViewMovieDetailsActivity.class);
+            intent.putExtra("movie_id", selectedMovie.getMovieId());
+            startActivity(intent);
 
         });
 
@@ -72,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (sharedPreferences.getString("apikey", "").isEmpty())
+        if (sharedPreferences.getString("apikey", "").isEmpty()) {
             finish();
+        }
+
     }
 
     @Override
@@ -89,8 +95,10 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.menu_add) {
+        int itemId = item.getItemId();
+
+
+        if (itemId == R.id.menu_add) {
             Intent intent = new Intent(getApplicationContext(), CreateMovieActivity.class);
             startActivity(intent);
             return true;

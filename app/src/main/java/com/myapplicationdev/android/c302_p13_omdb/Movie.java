@@ -146,4 +146,5 @@ public class Movie implements Serializable {
     public void setPoster(String poster) {
         this.poster = poster;
     }
+
 }
